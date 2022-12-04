@@ -14,8 +14,8 @@ connections:
     url: http://contabilidad-service
 
 mongo:
-  username: svcmngintdev
-  password: ekjv5bHB4PtT
+  username: almacendev
+  password: almacendev
   database: db_almacen
   host: 127.0.0.1
   port: 30044
