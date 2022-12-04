@@ -1,0 +1,26 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: almacen_service
+  profiles:
+    active: dev
+
+connections:
+  obras-service:
+    url: http://obras-service
+  contabilidad-service:
+    url: http://contabilidad-service
+
+mongo:
+  username: svcmngintdev
+  password: ekjv5bHB4PtT
+  database: db_almacen
+  host: 127.0.0.1
+  port: 30044
+  connectionTimeoutMS: 30000
+  socketTimeoutMS: 60000
+  authSource: db_almacen
+  w: majority
+  retryWrites: true
