@@ -19,4 +19,5 @@ connections:
   obras-service:
     url: https://452794eb-6ab4-481d-95ca-3069b48b0fde.mock.pstmn.io/solicitud/updatestate
   contabilidad-service:
-    url: https://ed1eadb5-c0dc-41d0-8494-a319b1584921.mock.pstmn.io/comprobante
+#    url: https://ed1eadb5-c0dc-41d0-8494-a319b1584921.mock.pstmn.io/comprobante
+    url: http://localhost:8080/contabilidad/saveComprobante

@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ComprobanteRequest {
-    private String tipoComprobante;
-    private String estado;
-    private String glosa;
-    private String procesoOrigen;
-    private Integer idRegistroExterno;
+    private String TipoComprobante;
+    private String Estado;
+    private String Glosa;
+    private String ProcesoOrigen;
+    private Integer IdRegistroExterno;
 }
