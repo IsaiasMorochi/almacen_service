@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ObrasUpdateRequest {
     private Integer idSolicitud;
+    private Integer idSolicitudAlmacen;
 }

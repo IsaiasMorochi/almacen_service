@@ -63,7 +63,7 @@ public class AlmacenSolicitudService {
 
             var solicitDto = extractSolicitudDto(solicitudAlmacen.get());
 
-            this.obrasRepositoty.updatestate(solicitDto);
+            this.obrasRepositoty.updatestateObras(solicitDto);
             this.contabilidadRepository.comprobanteContable(solicitDto);
 
             return Optional.of(solicitDto);

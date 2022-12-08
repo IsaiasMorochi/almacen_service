@@ -4,6 +4,8 @@ import bo.imorochi.almacen_service.application.utils.exception.ApplicationExcept
 import bo.imorochi.almacen_service.domain.model.AlmacenSolicitud;
 import bo.imorochi.almacen_service.domain.model.Solicitud;
 import bo.imorochi.almacen_service.domain.repository.ObrasRepositoty;
+import bo.imorochi.almacen_service.infraestructure.outbound.obras.dto.ObrasResponse;
+import bo.imorochi.almacen_service.infraestructure.outbound.obras.dto.ObrasUpdateRequest;
 import bo.imorochi.almacen_service.infraestructure.utils.configuration.ParamConfiguration;
 import bo.imorochi.almacen_service.infraestructure.utils.enums.EndpointEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -30,19 +32,20 @@ public class ObrasConection implements ObrasRepositoty {
     }
 
     @Override
-    public Integer updatestate(Solicitud request) {
+    public Integer updatestateObras(Solicitud request) {
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            HttpEntity<Solicitud> bodyRequest = new HttpEntity<>(request, headers);
-            String uri = this.paramConfiguration.getContabilidadServiceURL();
+            ObrasUpdateRequest obrasRequest = new ObrasUpdateRequest(request.getIdRegistroExterno(), request.getIdSolicitud());
+            HttpEntity<ObrasUpdateRequest> bodyRequest = new HttpEntity<>(obrasRequest, headers);
+            String uri = this.paramConfiguration.getObrasServiceURL();
 
-            ResponseEntity<Solicitud> obrasState = restTemplate.postForEntity(uri, bodyRequest, Solicitud.class);
-            log.info("[ObrasConection][updatestate] comprobante: {}", obrasState);
+            ResponseEntity<ObrasResponse> obrasResponse = restTemplate.exchange(uri, HttpMethod.PUT, bodyRequest, ObrasResponse.class);
+            log.info("[ObrasConection][updatestateObras] comprobante: {}", obrasResponse);
 
-            return obrasState.getBody().getIdRegistroExterno();
+            return obrasResponse.getBody().getIdSolicitud();
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             log.error("Error en la conexión con SERVICIO CONTABILIDAD");
