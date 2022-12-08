@@ -1,12 +1,14 @@
-package bo.imorochi.almacen_service.application.dto;
+package bo.imorochi.almacen_service.infraestructure.outbound.obras.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SolicitudResponse {
+public class ObrasUpdateRequest {
     private Integer idSolicitud;
 }

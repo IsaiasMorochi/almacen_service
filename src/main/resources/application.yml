@@ -1,26 +1,22 @@
-server:
-  port: 8090
+#server:
+#  port: 8090
 
 spring:
   application:
     name: almacen_service
   profiles:
     active: dev
+  data:
+    mongodb:
+      auto-index-creation: true
+      host: localhost
+      port: 27017
+#      username:
+#      password:
+      database: db_almacen
 
 connections:
   obras-service:
     url: http://obras-service
   contabilidad-service:
-    url: http://contabilidad-service
-
-mongo:
-  username: almacendev
-  password: almacendev
-  database: db_almacen
-  host: 127.0.0.1
-  port: 30044
-  connectionTimeoutMS: 30000
-  socketTimeoutMS: 60000
-  authSource: db_almacen
-  w: majority
-  retryWrites: true
+    url: https://ed1eadb5-c0dc-41d0-8494-a319b1584921.mock.pstmn.io/comprobante
