@@ -1,12 +1,11 @@
 package bo.imorochi.almacen_service.infraestructure.outbound.contabilidad;
 
 import bo.imorochi.almacen_service.application.utils.exception.ApplicationException;
-import bo.imorochi.almacen_service.domain.model.AlmacenSolicitud;
+import bo.imorochi.almacen_service.domain.model.Solicitud;
 import bo.imorochi.almacen_service.domain.repository.ContabilidadRepository;
 import bo.imorochi.almacen_service.infraestructure.outbound.contabilidad.dto.ComprobanteDto;
 import bo.imorochi.almacen_service.infraestructure.outbound.contabilidad.dto.ComprobanteRequest;
 import bo.imorochi.almacen_service.infraestructure.utils.configuration.ParamConfiguration;
-import bo.imorochi.almacen_service.infraestructure.utils.enums.EndpointEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -30,7 +29,7 @@ public class ContabilidadConection implements ContabilidadRepository {
     }
 
     @Override
-    public ComprobanteDto comprobanteContable(AlmacenSolicitud solicitud) throws ApplicationException {
+    public Integer comprobanteContable(Solicitud solicitud) throws ApplicationException {
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -39,7 +38,8 @@ public class ContabilidadConection implements ContabilidadRepository {
             var request = ComprobanteRequest.builder()
                     .tipoComprobante("ADL").estado("DEFINITIVO")
                     .glosa("Asiento automático desde almacenes")
-                    .procesoOrigen("ALM").idRegistroExterno(solicitud.getIdSolicitud())
+                    .procesoOrigen("ALM")
+                    .idRegistroExterno(solicitud.getIdSolicitud())
                     .build();
 
             HttpEntity<ComprobanteRequest> bodyRequest = new HttpEntity<>(request, headers);
@@ -48,7 +48,7 @@ public class ContabilidadConection implements ContabilidadRepository {
             ResponseEntity<ComprobanteDto> comprobante = restTemplate.postForEntity(uri, bodyRequest, ComprobanteDto.class);
             log.info("[ContabilidadConection][comprobanteContable] comprobante: {}", comprobante);
 
-            return comprobante.getBody();
+            return comprobante.getBody().getIdRegistroExterno();
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             log.error("Error en la conexión con SERVICIO CONTABILIDAD");

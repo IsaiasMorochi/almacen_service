@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface MongoAlmacenSolicitudFacade extends MongoRepository<AlmacenSolicitud, Integer> {
+    @Query("{'idSolicitud' : :#{#idSolicitud}}")
+    Optional<AlmacenSolicitud> findByIdSolicitud(@Param("idSolicitud") Integer idSolicito);
 
-    @Query("{'idSolicito' : :#{#idSolicito}}")
-    Optional<AlmacenSolicitud> findByIdSolicitud(@Param("idSolicito") Integer idSolicito);
 }

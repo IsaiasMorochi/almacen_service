@@ -2,6 +2,7 @@ package bo.imorochi.almacen_service.infraestructure.outbound.obras;
 
 import bo.imorochi.almacen_service.application.utils.exception.ApplicationException;
 import bo.imorochi.almacen_service.domain.model.AlmacenSolicitud;
+import bo.imorochi.almacen_service.domain.model.Solicitud;
 import bo.imorochi.almacen_service.domain.repository.ObrasRepositoty;
 import bo.imorochi.almacen_service.infraestructure.utils.configuration.ParamConfiguration;
 import bo.imorochi.almacen_service.infraestructure.utils.enums.EndpointEnum;
@@ -29,19 +30,19 @@ public class ObrasConection implements ObrasRepositoty {
     }
 
     @Override
-    public Integer updatestate(AlmacenSolicitud request) {
+    public Integer updatestate(Solicitud request) {
         try {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            HttpEntity<AlmacenSolicitud> bodyRequest = new HttpEntity<>(request, headers);
+            HttpEntity<Solicitud> bodyRequest = new HttpEntity<>(request, headers);
             String uri = this.paramConfiguration.getContabilidadServiceURL();
 
-            ResponseEntity<AlmacenSolicitud> obrasState = restTemplate.postForEntity(uri, bodyRequest, AlmacenSolicitud.class);
+            ResponseEntity<Solicitud> obrasState = restTemplate.postForEntity(uri, bodyRequest, Solicitud.class);
             log.info("[ObrasConection][updatestate] comprobante: {}", obrasState);
 
-            return obrasState.getBody().getIdSolicitud();
+            return obrasState.getBody().getIdRegistroExterno();
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             log.error("Error en la conexión con SERVICIO CONTABILIDAD");

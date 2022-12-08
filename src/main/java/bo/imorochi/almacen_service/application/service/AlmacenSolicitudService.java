@@ -5,6 +5,7 @@ import bo.imorochi.almacen_service.application.dto.SolicitudResponse;
 import bo.imorochi.almacen_service.application.dto.SolicitudUpdateRequest;
 import bo.imorochi.almacen_service.application.utils.exception.ApplicationException;
 import bo.imorochi.almacen_service.domain.model.AlmacenSolicitud;
+import bo.imorochi.almacen_service.domain.model.Solicitud;
 import bo.imorochi.almacen_service.domain.repository.AlmacenSolicitudRepository;
 import bo.imorochi.almacen_service.domain.repository.ContabilidadRepository;
 import bo.imorochi.almacen_service.domain.repository.ObrasRepositoty;
@@ -49,25 +50,39 @@ public class AlmacenSolicitudService {
         }
     }
 
-    public Optional<AlmacenSolicitud> deliveryOrder(SolicitudUpdateRequest request) {
+    public Optional<Solicitud> deliveryOrder(SolicitudUpdateRequest request) {
         try {
 
-            var solicitud = almacenSolicitudRepository.findByIdSolicitud(request.getIdSolicitud());
+            var solicitudAlmacen = almacenSolicitudRepository.findByIdSolicitud(request.getIdSolicitud());
 
-            if (solicitud.isEmpty())
+            if (solicitudAlmacen.isEmpty())
                 throw new ApplicationException("No se encontro un registro previamente registrado para la solicitud: " + request.getIdSolicitud());
 
-            solicitud.get().setEstadoSolicitud("ENTREGADO");
-            almacenSolicitudRepository.save(solicitud.get());
+            solicitudAlmacen.get().setEstadoSolicitud("ENTREGADO");
+            almacenSolicitudRepository.save(solicitudAlmacen.get());
 
-            this.obrasRepositoty.updatestate(solicitud.get());
-            this.contabilidadRepository.comprobanteContable(solicitud.get());
+            var solicitDto = extractSolicitudDto(solicitudAlmacen.get());
 
-            return solicitud;
+            this.obrasRepositoty.updatestate(solicitDto);
+            this.contabilidadRepository.comprobanteContable(solicitDto);
+
+            return Optional.of(solicitDto);
 
         } catch (ApplicationException e) {
             throw new ApplicationException(e.getMessage());
         }
+    }
+
+    private Solicitud extractSolicitudDto(AlmacenSolicitud almacenSolicitud) {
+        return Solicitud.builder()
+                .idSolicitud(almacenSolicitud.getIdSolicitud())
+                .titulo(almacenSolicitud.getTitulo())
+                .descripcion(almacenSolicitud.getDescripcion())
+                .estadoSolicitud(almacenSolicitud.getEstadoSolicitud())
+                .fechaSolicitud(almacenSolicitud.getFechaSolicitud())
+                .procesoOrigen(almacenSolicitud.getProcesoOrigen())
+                .idRegistroExterno(almacenSolicitud.getIdRegistroExterno())
+                .build();
     }
 
     public List<AlmacenSolicitud> findAll() {

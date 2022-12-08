@@ -13,5 +13,5 @@ public class ComprobanteDto {
     private String estado;
     private String glosa;
     private String procesoOrigen;
-    private Integer registroExterno;
+    private Integer idRegistroExterno;
 }

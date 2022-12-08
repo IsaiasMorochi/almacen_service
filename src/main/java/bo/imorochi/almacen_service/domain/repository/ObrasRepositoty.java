@@ -1,8 +1,8 @@
 package bo.imorochi.almacen_service.domain.repository;
 
-import bo.imorochi.almacen_service.domain.model.AlmacenSolicitud;
+import bo.imorochi.almacen_service.domain.model.Solicitud;
 
 public interface ObrasRepositoty {
 
-    Integer updatestate(AlmacenSolicitud request);
+    Integer updatestate(Solicitud request);
 }
